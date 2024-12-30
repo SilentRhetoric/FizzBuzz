@@ -1,0 +1,357 @@
+#pragma version 10
+
+smart_contracts.fizzbuzz.contract.Fizzbuzz.approval_program:
+    intcblock 2 1 0 10
+    bytecblock 0x30313233343536373839 0x068101
+    callsub __puya_arc4_router__
+    return
+
+
+// smart_contracts.fizzbuzz.contract.Fizzbuzz.__puya_arc4_router__() -> uint64:
+__puya_arc4_router__:
+    // smart_contracts/fizzbuzz/contract.py:3
+    // class Fizzbuzz(ARC4Contract):
+    proto 0 1
+    txn NumAppArgs
+    bz __puya_arc4_router___bare_routing@5
+    pushbytes 0xfcef6607 // method "fizzbuzz()string[]"
+    txna ApplicationArgs 0
+    match __puya_arc4_router___fizzbuzz_route@2
+    intc_2 // 0
+    retsub
+
+__puya_arc4_router___fizzbuzz_route@2:
+    // smart_contracts/fizzbuzz/contract.py:4
+    // @arc4.abimethod()
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    callsub fizzbuzz
+    pushbytes 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___bare_routing@5:
+    // smart_contracts/fizzbuzz/contract.py:3
+    // class Fizzbuzz(ARC4Contract):
+    txn OnCompletion
+    bnz __puya_arc4_router___after_if_else@9
+    txn ApplicationID
+    !
+    assert // can only call when creating
+    intc_1 // 1
+    retsub
+
+__puya_arc4_router___after_if_else@9:
+    // smart_contracts/fizzbuzz/contract.py:3
+    // class Fizzbuzz(ARC4Contract):
+    intc_2 // 0
+    retsub
+
+
+// smart_contracts.fizzbuzz.contract.Fizzbuzz.fizzbuzz() -> bytes:
+fizzbuzz:
+    // smart_contracts/fizzbuzz/contract.py:4-5
+    // @arc4.abimethod()
+    // def fizzbuzz(self) -> arc4.DynamicArray[arc4.String]:
+    proto 0 1
+    // smart_contracts/fizzbuzz/contract.py:6
+    // result = arc4.DynamicArray[arc4.String]()
+    pushbytes 0x0000
+    // smart_contracts/fizzbuzz/contract.py:7
+    // for n in urange(100):
+    intc_2 // 0
+
+fizzbuzz_for_header@1:
+    // smart_contracts/fizzbuzz/contract.py:7
+    // for n in urange(100):
+    frame_dig 1
+    pushint 100 // 100
+    <
+    bz fizzbuzz_after_for@4
+    // smart_contracts/fizzbuzz/contract.py:8-9
+    // # Need to do OpUps to get budget for the next iteration of the loop
+    // ensure_budget(2550, OpUpFeeSource.AppAccount)
+    pushint 2550 // 2550
+    intc_1 // 1
+    callsub ensure_budget
+    // smart_contracts/fizzbuzz/contract.py:10
+    // result.append(arc4.String(self.divide(n + 1))) # Start from 1 not 0
+    frame_dig 1
+    intc_1 // 1
+    +
+    dup
+    frame_bury 1
+    callsub divide
+    dup
+    len
+    itob
+    extract 6 2
+    swap
+    concat
+    frame_dig 0
+    swap
+    intc_1 // 1
+    callsub dynamic_array_concat_byte_length_head
+    frame_bury 0
+    b fizzbuzz_for_header@1
+
+fizzbuzz_after_for@4:
+    // smart_contracts/fizzbuzz/contract.py:11
+    // return result
+    retsub
+
+
+// smart_contracts.fizzbuzz.contract.Fizzbuzz.divide(number: uint64) -> bytes:
+divide:
+    // smart_contracts/fizzbuzz/contract.py:13-15
+    // # The core FizzBuzz algorithm logic
+    // @subroutine
+    // def divide(self, number: UInt64) -> String:
+    proto 1 1
+    // smart_contracts/fizzbuzz/contract.py:16
+    // if number % 3 == 0 and number % 5 == 0:
+    frame_dig -1
+    pushint 3 // 3
+    %
+    dup
+    bnz divide_else_body@3
+    frame_dig -1
+    pushint 5 // 5
+    %
+    bnz divide_else_body@3
+    // smart_contracts/fizzbuzz/contract.py:17
+    // return String("FizzBuzz")
+    pushbytes "FizzBuzz"
+    swap
+    retsub
+
+divide_else_body@3:
+    // smart_contracts/fizzbuzz/contract.py:18
+    // elif number % 3 == 0:
+    frame_dig 0
+    bnz divide_else_body@5
+    // smart_contracts/fizzbuzz/contract.py:19
+    // return String("Fizz")
+    pushbytes "Fizz"
+    swap
+    retsub
+
+divide_else_body@5:
+    // smart_contracts/fizzbuzz/contract.py:20
+    // elif number % 5 == 0:
+    frame_dig -1
+    pushint 5 // 5
+    %
+    bnz divide_else_body@7
+    // smart_contracts/fizzbuzz/contract.py:21
+    // return String("Buzz")
+    pushbytes "Buzz"
+    swap
+    retsub
+
+divide_else_body@7:
+    // smart_contracts/fizzbuzz/contract.py:23
+    // return itoa(number)
+    frame_dig -1
+    callsub itoa
+    swap
+    retsub
+
+
+// smart_contracts.fizzbuzz.contract.itoa(int: uint64) -> bytes:
+itoa:
+    // smart_contracts/fizzbuzz/contract.py:25-27
+    // # Utility to convert integers-->strings so they can be added to the result array
+    // @subroutine
+    // def itoa(int: UInt64) -> String:
+    proto 1 1
+    // smart_contracts/fizzbuzz/contract.py:30
+    // if int < radix:
+    frame_dig -1
+    // smart_contracts/fizzbuzz/contract.py:29
+    // radix = digits.length
+    intc_3 // 10
+    // smart_contracts/fizzbuzz/contract.py:30
+    // if int < radix:
+    <
+    bz itoa_after_if_else@2
+    // smart_contracts/fizzbuzz/contract.py:28
+    // digits = Bytes(b"0123456789")
+    bytec_0 // 0x30313233343536373839
+    // smart_contracts/fizzbuzz/contract.py:31
+    // return String.from_bytes(digits[int])
+    frame_dig -1
+    intc_1 // 1
+    extract3
+    retsub
+
+itoa_after_if_else@2:
+    // smart_contracts/fizzbuzz/contract.py:32
+    // return itoa(int // radix) + String.from_bytes(digits[int % radix])
+    frame_dig -1
+    // smart_contracts/fizzbuzz/contract.py:29
+    // radix = digits.length
+    intc_3 // 10
+    // smart_contracts/fizzbuzz/contract.py:32
+    // return itoa(int // radix) + String.from_bytes(digits[int % radix])
+    /
+    callsub itoa
+    frame_dig -1
+    // smart_contracts/fizzbuzz/contract.py:29
+    // radix = digits.length
+    intc_3 // 10
+    // smart_contracts/fizzbuzz/contract.py:32
+    // return itoa(int // radix) + String.from_bytes(digits[int % radix])
+    %
+    // smart_contracts/fizzbuzz/contract.py:28
+    // digits = Bytes(b"0123456789")
+    bytec_0 // 0x30313233343536373839
+    // smart_contracts/fizzbuzz/contract.py:32
+    // return itoa(int // radix) + String.from_bytes(digits[int % radix])
+    swap
+    intc_1 // 1
+    extract3
+    concat
+    retsub
+
+
+// _puya_lib.util.ensure_budget(required_budget: uint64, fee_source: uint64) -> void:
+ensure_budget:
+    proto 2 0
+    frame_dig -2
+    intc_3 // 10
+    +
+
+ensure_budget_while_top@1:
+    frame_dig 0
+    global OpcodeBudget
+    >
+    bz ensure_budget_after_while@7
+    itxn_begin
+    pushint 6 // appl
+    itxn_field TypeEnum
+    pushint 5 // DeleteApplication
+    itxn_field OnCompletion
+    bytec_1 // 0x068101
+    itxn_field ApprovalProgram
+    bytec_1 // 0x068101
+    itxn_field ClearStateProgram
+    frame_dig -1
+    switch ensure_budget_switch_case_0@3 ensure_budget_switch_case_1@4
+    b ensure_budget_switch_case_next@6
+
+ensure_budget_switch_case_0@3:
+    intc_2 // 0
+    itxn_field Fee
+    b ensure_budget_switch_case_next@6
+
+ensure_budget_switch_case_1@4:
+    global MinTxnFee
+    itxn_field Fee
+
+ensure_budget_switch_case_next@6:
+    itxn_submit
+    b ensure_budget_while_top@1
+
+ensure_budget_after_while@7:
+    retsub
+
+
+// _puya_lib.arc4.dynamic_array_concat_byte_length_head(array: bytes, new_items_bytes: bytes, new_items_count: uint64) -> bytes:
+dynamic_array_concat_byte_length_head:
+    proto 3 1
+    frame_dig -3
+    intc_2 // 0
+    extract_uint16
+    dup
+    frame_dig -1
+    +
+    swap
+    intc_0 // 2
+    *
+    intc_0 // 2
+    +
+    dig 1
+    itob
+    extract 6 2
+    frame_dig -3
+    intc_0 // 2
+    dig 3
+    substring3
+    frame_dig -1
+    intc_0 // 2
+    *
+    bzero
+    concat
+    frame_dig -3
+    len
+    frame_dig -3
+    uncover 4
+    uncover 2
+    substring3
+    concat
+    frame_dig -2
+    concat
+    uncover 2
+    intc_2 // 0
+    callsub recalculate_head_for_elements_with_byte_length_head
+    concat
+    retsub
+
+
+// _puya_lib.arc4.recalculate_head_for_elements_with_byte_length_head(array_head_and_tail: bytes, length: uint64, start_at_index: uint64) -> bytes:
+recalculate_head_for_elements_with_byte_length_head:
+    proto 3 1
+    frame_dig -2
+    intc_0 // 2
+    *
+    dup
+    frame_dig -1
+    intc_0 // 2
+    *
+    dup
+    cover 2
+    frame_dig -3
+    swap
+    extract_uint16
+    frame_dig -1
+    select
+
+recalculate_head_for_elements_with_byte_length_head_for_header@1:
+    frame_dig 1
+    frame_dig 0
+    <
+    bz recalculate_head_for_elements_with_byte_length_head_after_for@4
+    frame_dig 2
+    dup
+    itob
+    extract 6 2
+    frame_dig -3
+    frame_dig 1
+    dup
+    cover 4
+    uncover 2
+    replace3
+    dup
+    frame_bury -3
+    dig 1
+    extract_uint16
+    intc_0 // 2
+    +
+    +
+    frame_bury 2
+    intc_0 // 2
+    +
+    frame_bury 1
+    b recalculate_head_for_elements_with_byte_length_head_for_header@1
+
+recalculate_head_for_elements_with_byte_length_head_after_for@4:
+    frame_dig -3
+    frame_bury 0
+    retsub
