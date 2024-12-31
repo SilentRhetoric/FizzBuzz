@@ -6,11 +6,15 @@ class Fizzbuzz(ARC4Contract):
         result = arc4.DynamicArray[arc4.String]()
         for n in urange(100):
             # Need to do OpUps to get budget for the next iteration of the loop
-            ensure_budget(2550, OpUpFeeSource.AppAccount)
+            # WARNING: using OpUpFeeSource.AppAccount is unsafe for production
+            # Instead, use OpUpFeeSource.GroupCredit, which sets innerTxn fees
+            # to zero and forces calls to cover innerTxn fees on outerTxns
+            ensure_budget(2550, OpUpFeeSource.AppAccount) # FOR DEMO ONLY
+
             result.append(arc4.String(self.divide(n + 1))) # Start from 1 not 0
         return result
     
-    # The core FizzBuzz algorithm logic
+    # The core FizzBuzz solution algorithm logic
     @subroutine
     def divide(self, number: UInt64) -> String:
         if number % 3 == 0 and number % 5 == 0:

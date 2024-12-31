@@ -30,6 +30,9 @@ def deploy(
     )
 
     # Ensure the deployed app is funded to send inner txns for opcode budget
+    # This is a convenience shortcut for the demo and would not be used in prod
+    # Instead, one would force app callers to cover innerTxn fees on outerTxns
+    # by hard-coding innerTxn fees to 0 in the smart contract.
     algokit_utils.ensure_funded(
         algod_client,
         algokit_utils.EnsureBalanceParameters(
@@ -39,7 +42,7 @@ def deploy(
         ),
     )
 
-    # Where the app call actually occurs--so terse!
+    # Where the app call actually occurs
     response = app_client.fizzbuzz()
 
     logger.info(
