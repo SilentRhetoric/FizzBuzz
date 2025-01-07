@@ -3,7 +3,7 @@
   "sources": [
     "../../fizzbuzz/contract.py"
   ],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAEA;;;AAAA;;AAAA;;;AAAA;;;;;;AAAA;;;AAAA;;;;AAAA;AAAA;AACK;;AAAA;AAAA;AAAA;;AAAA;AAAA;;;AAAA;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AADL;;AAAA;;;;;;;;;AAAA;AAAA;AACA;;;AAEiB;;;;AACA;AAAA;;AAAO;;AAAP;AAAjB;;;AAE0B;;;AAAM;AAApB;;;AACsC;;AAAI;AAAJ;AAAA;AAAA;;AAAZ;;;AAAZ;AAAA;AAAA;AAAA;;;AAAA;AAAA;AAAd;;AAAA;AAAA;AAAA;;;AAAA;;;;;AACJ;AAGR;;;AAEW;;AAAS;;AAAT;AAAA;AAAA;;;AAAoB;;AAAS;;AAAT;AAApB;;;AACQ;;;;;;;;;;AAAP;AAAA;AACZ;;AAAA;;;AACmB;;;;;;AAAP;AAAA;AACC;;AAAS;;AAAT;AAAb;;;AACmB;;;;;;AAAP;AAAA;AAEO;;AAAA;;;AAAP;AAAA;AAGZ;;;AAIO;;AADK;AACL;AAAP;;;AAFa;AAGoB;;AAAA;AAAA;AAAzB;AACQ;;AAHJ;AAGI;AAAL;;;AAA8C;;AAH7C;AAG6C;AAJ5C;AAIqC;AAAA;AAAA;AAAvC;AAAP;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAEA;;;AAAA;;AAAA;;;AAAA;;;;;;AAAA;;;AAAA;;;;AAAA;AAAA;AAaK;;AAAA;AAAA;AAAA;;AAAA;AAAA;;;AAAA;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAbL;;AAAA;;;;;;;;;AAAA;AAAA;AAaA;;;AAGiB;;;;AACA;AAAA;;AAAO;;AAAP;AAAjB;;;AAE0B;;;AAAM;AAApB;;;AAEsC;;AAAI;AAAJ;AAAA;AAAA;;AAAZ;;;AAAZ;AAAA;AAAA;AAAA;;;AAAA;AAAA;AAAd;;AAAA;AAAA;AAAA;;;AAAA;;;;;AACJ;AApBR;;;AAEW;;AAAS;;AAAT;AAAA;AAAA;;;AAAoB;;AAAS;;AAAT;AAApB;;;AACQ;;;;;;;;;;AAAP;AAAA;AACZ;;AAAA;;;AACmB;;;;;;AAAP;AAAA;AACC;;AAAS;;AAAT;AAAb;;;AACmB;;;;;;AAAP;AAAA;AAEO;;AAAA;;;AAAP;AAAA;AAeZ;;;AAIO;;AADK;AACL;AAAP;;;AAFa;AAGoB;;AAAA;AAAA;AAAzB;AACQ;;AAHJ;AAGI;AAAL;;;AAA8C;;AAH7C;AAG6C;AAJ5C;AAIqC;AAAA;AAAA;AAAvC;AAAP;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
   "op_pc_offset": 0,
   "pc_events": {
     "1": {
@@ -11,7 +11,7 @@
       "params": {},
       "block": "smart_contracts.fizzbuzz.contract.Fizzbuzz.approval_program",
       "stack_in": [],
-      "op": "intcblock 2 1 0 10"
+      "op": "intcblock 2 0 1 10"
     },
     "7": {
       "op": "bytecblock 0x30313233343536373839 0x068101"
@@ -69,7 +69,7 @@
       "stack_out": []
     },
     "49": {
-      "op": "intc_2 // 0",
+      "op": "intc_1 // 0",
       "defined_out": [
         "0"
       ],
@@ -162,7 +162,7 @@
       "stack_out": []
     },
     "70": {
-      "op": "intc_1 // 1",
+      "op": "intc_2 // 1",
       "defined_out": [
         "1"
       ],
@@ -213,7 +213,7 @@
       "stack_out": []
     },
     "81": {
-      "op": "intc_1 // 1",
+      "op": "intc_2 // 1",
       "defined_out": [
         "1"
       ],
@@ -228,7 +228,7 @@
     "83": {
       "block": "__puya_arc4_router___after_if_else@9",
       "stack_in": [],
-      "op": "intc_2 // 0",
+      "op": "intc_1 // 0",
       "defined_out": [
         "0"
       ],
@@ -251,7 +251,7 @@
       "op": "pushbytes 0x0000"
     },
     "92": {
-      "op": "intc_2 // 0",
+      "op": "intc_1 // 0",
       "defined_out": [
         "n#0",
         "result#0"
@@ -322,9 +322,9 @@
       ]
     },
     "104": {
-      "op": "intc_1 // 1",
+      "op": "intc_1 // 0",
       "defined_out": [
-        "1",
+        "0",
         "2550",
         "n#0"
       ],
@@ -332,7 +332,7 @@
         "result#0",
         "n#0",
         "2550",
-        "1"
+        "0"
       ]
     },
     "105": {
@@ -352,7 +352,11 @@
       ]
     },
     "110": {
-      "op": "intc_1 // 1",
+      "op": "intc_2 // 1",
+      "defined_out": [
+        "1",
+        "n#0"
+      ],
       "stack_out": [
         "result#0",
         "n#0",
@@ -502,7 +506,7 @@
       ]
     },
     "129": {
-      "op": "intc_1 // 1",
+      "op": "intc_2 // 1",
       "stack_out": [
         "result#0",
         "n#0",
@@ -848,7 +852,7 @@
       ]
     },
     "220": {
-      "op": "intc_1 // 1",
+      "op": "intc_2 // 1",
       "defined_out": [
         "0x30313233343536373839",
         "1",
@@ -962,7 +966,7 @@
       ]
     },
     "236": {
-      "op": "intc_1 // 1",
+      "op": "intc_2 // 1",
       "defined_out": [
         "0x30313233343536373839",
         "1",
@@ -1167,7 +1171,7 @@
       "stack_in": [
         "required_budget_with_buffer#0"
       ],
-      "op": "intc_2 // 0",
+      "op": "intc_1 // 0",
       "defined_out": [
         "0"
       ],
@@ -1244,7 +1248,7 @@
       ]
     },
     "301": {
-      "op": "intc_2 // 0",
+      "op": "intc_1 // 0",
       "defined_out": [
         "0",
         "array#0 (copy)"
@@ -1635,7 +1639,7 @@
       ]
     },
     "346": {
-      "op": "intc_2 // 0",
+      "op": "intc_1 // 0",
       "stack_out": [
         "tmp%2#0",
         "tmp%10#0",

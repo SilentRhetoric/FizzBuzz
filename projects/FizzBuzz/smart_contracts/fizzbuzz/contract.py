@@ -1,19 +1,6 @@
 from algopy import ARC4Contract, Bytes, OpUpFeeSource, ensure_budget, subroutine, UInt64, String, urange, arc4
 
 class Fizzbuzz(ARC4Contract):
-    @arc4.abimethod()
-    def fizzbuzz(self) -> arc4.DynamicArray[arc4.String]:
-        result = arc4.DynamicArray[arc4.String]()
-        for n in urange(100):
-            # Need to do OpUps to get budget for the next iteration of the loop
-            # WARNING: using OpUpFeeSource.AppAccount is unsafe for production
-            # Instead, use OpUpFeeSource.GroupCredit, which sets innerTxn fees
-            # to zero and forces calls to cover innerTxn fees on outerTxns
-            ensure_budget(2550, OpUpFeeSource.AppAccount) # FOR DEMO ONLY
-
-            result.append(arc4.String(self.divide(n + 1))) # Start from 1 not 0
-        return result
-    
     # The core FizzBuzz solution algorithm logic
     @subroutine
     def divide(self, number: UInt64) -> String:
@@ -25,6 +12,18 @@ class Fizzbuzz(ARC4Contract):
             return String("Buzz")
         else:
             return itoa(number)
+        
+    @arc4.abimethod()
+    def fizzbuzz(self) -> arc4.DynamicArray[arc4.String]:
+        # Instantiate an empty but dynamic-length array of strings to return
+        result = arc4.DynamicArray[arc4.String]() # Note this is an array only of strings
+        for n in urange(100):
+            # Need to do OpUps to get OpCode budget for the next iteration of the loop
+            ensure_budget(2550, OpUpFeeSource.GroupCredit) 
+
+            result.append(arc4.String(self.divide(n + 1))) # Start from 1 not 0
+        return result
+
 
 # Utility to convert integers-->strings so they can be added to the result array
 @subroutine

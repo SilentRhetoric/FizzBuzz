@@ -1,7 +1,7 @@
 #pragma version 10
 
 smart_contracts.fizzbuzz.contract.Fizzbuzz.approval_program:
-    intcblock 2 1 0 10
+    intcblock 2 0 1 10
     bytecblock 0x30313233343536373839 0x068101
     callsub __puya_arc4_router__
     return
@@ -17,11 +17,11 @@ __puya_arc4_router__:
     pushbytes 0xfcef6607 // method "fizzbuzz()string[]"
     txna ApplicationArgs 0
     match __puya_arc4_router___fizzbuzz_route@2
-    intc_2 // 0
+    intc_1 // 0
     retsub
 
 __puya_arc4_router___fizzbuzz_route@2:
-    // smart_contracts/fizzbuzz/contract.py:4
+    // smart_contracts/fizzbuzz/contract.py:16
     // @arc4.abimethod()
     txn OnCompletion
     !
@@ -33,7 +33,7 @@ __puya_arc4_router___fizzbuzz_route@2:
     swap
     concat
     log
-    intc_1 // 1
+    intc_2 // 1
     retsub
 
 __puya_arc4_router___bare_routing@5:
@@ -44,46 +44,47 @@ __puya_arc4_router___bare_routing@5:
     txn ApplicationID
     !
     assert // can only call when creating
-    intc_1 // 1
+    intc_2 // 1
     retsub
 
 __puya_arc4_router___after_if_else@9:
     // smart_contracts/fizzbuzz/contract.py:3
     // class Fizzbuzz(ARC4Contract):
-    intc_2 // 0
+    intc_1 // 0
     retsub
 
 
 // smart_contracts.fizzbuzz.contract.Fizzbuzz.fizzbuzz() -> bytes:
 fizzbuzz:
-    // smart_contracts/fizzbuzz/contract.py:4-5
+    // smart_contracts/fizzbuzz/contract.py:16-17
     // @arc4.abimethod()
     // def fizzbuzz(self) -> arc4.DynamicArray[arc4.String]:
     proto 0 1
-    // smart_contracts/fizzbuzz/contract.py:6
-    // result = arc4.DynamicArray[arc4.String]()
+    // smart_contracts/fizzbuzz/contract.py:18-19
+    // # Instantiate an empty but dynamic-length array of strings to return
+    // result = arc4.DynamicArray[arc4.String]() # Note this is an array only of strings
     pushbytes 0x0000
-    // smart_contracts/fizzbuzz/contract.py:7
+    // smart_contracts/fizzbuzz/contract.py:20
     // for n in urange(100):
-    intc_2 // 0
+    intc_1 // 0
 
 fizzbuzz_for_header@1:
-    // smart_contracts/fizzbuzz/contract.py:7
+    // smart_contracts/fizzbuzz/contract.py:20
     // for n in urange(100):
     frame_dig 1
     pushint 100 // 100
     <
     bz fizzbuzz_after_for@4
-    // smart_contracts/fizzbuzz/contract.py:8-9
-    // # Need to do OpUps to get budget for the next iteration of the loop
-    // ensure_budget(2550, OpUpFeeSource.AppAccount)
+    // smart_contracts/fizzbuzz/contract.py:21-22
+    // # Need to do OpUps to get OpCode budget for the next iteration of the loop
+    // ensure_budget(2550, OpUpFeeSource.GroupCredit)
     pushint 2550 // 2550
-    intc_1 // 1
+    intc_1 // 0
     callsub ensure_budget
-    // smart_contracts/fizzbuzz/contract.py:10
+    // smart_contracts/fizzbuzz/contract.py:24
     // result.append(arc4.String(self.divide(n + 1))) # Start from 1 not 0
     frame_dig 1
-    intc_1 // 1
+    intc_2 // 1
     +
     dup
     frame_bury 1
@@ -96,25 +97,25 @@ fizzbuzz_for_header@1:
     concat
     frame_dig 0
     swap
-    intc_1 // 1
+    intc_2 // 1
     callsub dynamic_array_concat_byte_length_head
     frame_bury 0
     b fizzbuzz_for_header@1
 
 fizzbuzz_after_for@4:
-    // smart_contracts/fizzbuzz/contract.py:11
+    // smart_contracts/fizzbuzz/contract.py:25
     // return result
     retsub
 
 
 // smart_contracts.fizzbuzz.contract.Fizzbuzz.divide(number: uint64) -> bytes:
 divide:
-    // smart_contracts/fizzbuzz/contract.py:13-15
-    // # The core FizzBuzz algorithm logic
+    // smart_contracts/fizzbuzz/contract.py:4-6
+    // # The core FizzBuzz solution algorithm logic
     // @subroutine
     // def divide(self, number: UInt64) -> String:
     proto 1 1
-    // smart_contracts/fizzbuzz/contract.py:16
+    // smart_contracts/fizzbuzz/contract.py:7
     // if number % 3 == 0 and number % 5 == 0:
     frame_dig -1
     pushint 3 // 3
@@ -125,38 +126,38 @@ divide:
     pushint 5 // 5
     %
     bnz divide_else_body@3
-    // smart_contracts/fizzbuzz/contract.py:17
+    // smart_contracts/fizzbuzz/contract.py:8
     // return String("FizzBuzz")
     pushbytes "FizzBuzz"
     swap
     retsub
 
 divide_else_body@3:
-    // smart_contracts/fizzbuzz/contract.py:18
+    // smart_contracts/fizzbuzz/contract.py:9
     // elif number % 3 == 0:
     frame_dig 0
     bnz divide_else_body@5
-    // smart_contracts/fizzbuzz/contract.py:19
+    // smart_contracts/fizzbuzz/contract.py:10
     // return String("Fizz")
     pushbytes "Fizz"
     swap
     retsub
 
 divide_else_body@5:
-    // smart_contracts/fizzbuzz/contract.py:20
+    // smart_contracts/fizzbuzz/contract.py:11
     // elif number % 5 == 0:
     frame_dig -1
     pushint 5 // 5
     %
     bnz divide_else_body@7
-    // smart_contracts/fizzbuzz/contract.py:21
+    // smart_contracts/fizzbuzz/contract.py:12
     // return String("Buzz")
     pushbytes "Buzz"
     swap
     retsub
 
 divide_else_body@7:
-    // smart_contracts/fizzbuzz/contract.py:23
+    // smart_contracts/fizzbuzz/contract.py:14
     // return itoa(number)
     frame_dig -1
     callsub itoa
@@ -166,56 +167,56 @@ divide_else_body@7:
 
 // smart_contracts.fizzbuzz.contract.itoa(int: uint64) -> bytes:
 itoa:
-    // smart_contracts/fizzbuzz/contract.py:25-27
+    // smart_contracts/fizzbuzz/contract.py:28-30
     // # Utility to convert integers-->strings so they can be added to the result array
     // @subroutine
     // def itoa(int: UInt64) -> String:
     proto 1 1
-    // smart_contracts/fizzbuzz/contract.py:30
+    // smart_contracts/fizzbuzz/contract.py:33
     // if int < radix:
     frame_dig -1
-    // smart_contracts/fizzbuzz/contract.py:29
+    // smart_contracts/fizzbuzz/contract.py:32
     // radix = digits.length
     intc_3 // 10
-    // smart_contracts/fizzbuzz/contract.py:30
+    // smart_contracts/fizzbuzz/contract.py:33
     // if int < radix:
     <
     bz itoa_after_if_else@2
-    // smart_contracts/fizzbuzz/contract.py:28
+    // smart_contracts/fizzbuzz/contract.py:31
     // digits = Bytes(b"0123456789")
     bytec_0 // 0x30313233343536373839
-    // smart_contracts/fizzbuzz/contract.py:31
+    // smart_contracts/fizzbuzz/contract.py:34
     // return String.from_bytes(digits[int])
     frame_dig -1
-    intc_1 // 1
+    intc_2 // 1
     extract3
     retsub
 
 itoa_after_if_else@2:
-    // smart_contracts/fizzbuzz/contract.py:32
+    // smart_contracts/fizzbuzz/contract.py:35
     // return itoa(int // radix) + String.from_bytes(digits[int % radix])
     frame_dig -1
-    // smart_contracts/fizzbuzz/contract.py:29
+    // smart_contracts/fizzbuzz/contract.py:32
     // radix = digits.length
     intc_3 // 10
-    // smart_contracts/fizzbuzz/contract.py:32
+    // smart_contracts/fizzbuzz/contract.py:35
     // return itoa(int // radix) + String.from_bytes(digits[int % radix])
     /
     callsub itoa
     frame_dig -1
-    // smart_contracts/fizzbuzz/contract.py:29
+    // smart_contracts/fizzbuzz/contract.py:32
     // radix = digits.length
     intc_3 // 10
-    // smart_contracts/fizzbuzz/contract.py:32
+    // smart_contracts/fizzbuzz/contract.py:35
     // return itoa(int // radix) + String.from_bytes(digits[int % radix])
     %
-    // smart_contracts/fizzbuzz/contract.py:28
+    // smart_contracts/fizzbuzz/contract.py:31
     // digits = Bytes(b"0123456789")
     bytec_0 // 0x30313233343536373839
-    // smart_contracts/fizzbuzz/contract.py:32
+    // smart_contracts/fizzbuzz/contract.py:35
     // return itoa(int // radix) + String.from_bytes(digits[int % radix])
     swap
-    intc_1 // 1
+    intc_2 // 1
     extract3
     concat
     retsub
@@ -247,7 +248,7 @@ ensure_budget_while_top@1:
     b ensure_budget_switch_case_next@6
 
 ensure_budget_switch_case_0@3:
-    intc_2 // 0
+    intc_1 // 0
     itxn_field Fee
     b ensure_budget_switch_case_next@6
 
@@ -267,7 +268,7 @@ ensure_budget_after_while@7:
 dynamic_array_concat_byte_length_head:
     proto 3 1
     frame_dig -3
-    intc_2 // 0
+    intc_1 // 0
     extract_uint16
     dup
     frame_dig -1
@@ -299,7 +300,7 @@ dynamic_array_concat_byte_length_head:
     frame_dig -2
     concat
     uncover 2
-    intc_2 // 0
+    intc_1 // 0
     callsub recalculate_head_for_elements_with_byte_length_head
     concat
     retsub

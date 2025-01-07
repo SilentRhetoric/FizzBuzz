@@ -18,32 +18,29 @@ def deploy(
         FizzbuzzClient,
     )
 
+    # Creating a client to call the smart contract applications
     app_client = FizzbuzzClient(
         algod_client,
         creator=deployer,
         indexer_client=indexer_client,
     )
 
-    deploy_result = app_client.deploy(
+    # Deploying the smart contract, idempotently
+    app_client.deploy(
         on_schema_break=algokit_utils.OnSchemaBreak.AppendApp,
         on_update=algokit_utils.OnUpdate.AppendApp,
     )
 
-    # Ensure the deployed app is funded to send inner txns for opcode budget
-    # This is a convenience shortcut for the demo and would not be used in prod
-    # Instead, one would force app callers to cover innerTxn fees on outerTxns
-    # by hard-coding innerTxn fees to 0 in the smart contract.
-    algokit_utils.ensure_funded(
-        algod_client,
-        algokit_utils.EnsureBalanceParameters(
-            account_to_fund=deploy_result.app.app_address,
-            min_spending_balance_micro_algos=1_000_000,
-            min_funding_increment_micro_algos=100_000,
-        ),
-    )
+    # We need to pay extra fees on this app call, so get a suggested_params
+    # object and override the suggested fee to a flat fee enough to cover
+    # all of the inner transactions required to buy more OpCode budget
+    sp = app_client.algod_client.suggested_params()
+    sp.flat_fee = True
+    sp.fee = 212_000 # Normal 1000 uA + 211_000 uA for the inner OpUp txns
+    txn_params = algokit_utils.TransactionParameters(suggested_params=sp)
 
-    # Where the app call actually occurs
-    response = app_client.fizzbuzz()
+    # Calling the fizzbuzz method on the app with our custom params
+    response = app_client.fizzbuzz(transaction_parameters=txn_params)
 
     logger.info(
         f"Called app {app_spec.contract.name} ({app_client.app_id})\n"
